@@ -3,7 +3,7 @@
   "displayName": "wa-MIIII",
   "description": "Plays a sound when a terminal command fails.",
   "version": "0.1.0",
-  "publisher": "SBAI-Youness",
+  "publisher": "youness-sbai",
   "repository": {
     "type": "git",
     "url": "https://github.com/SBAI-Youness/wa-miiii_vscode_extension.git"
