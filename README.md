@@ -1,4 +1,4 @@
-# Terminal Error Sound
+# wa-MIIII
 
 This VS Code extension plays a short sound whenever a command fails in your integrated terminal.
 

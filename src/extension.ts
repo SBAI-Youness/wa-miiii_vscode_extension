@@ -5,20 +5,20 @@ export function activate(context: vscode.ExtensionContext) {
 
   const soundProvider = new SoundPlayerProvider(context.extensionUri);
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider('terminal-error-sound-player', soundProvider)
+    vscode.window.registerWebviewViewProvider('wa-miiii-player', soundProvider)
   );
 
   // Register command to manually activate
   context.subscriptions.push(
-    vscode.commands.registerCommand('terminalErrorSound.activatePlayer', () => {
-      vscode.commands.executeCommand('terminal-error-sound-player.focus');
+    vscode.commands.registerCommand('waMiiii.activatePlayer', () => {
+      vscode.commands.executeCommand('wa-miiii-player.focus');
     })
   );
 
   // Try to auto-activate the player view after a short delay
   setTimeout(() => {
-    vscode.commands.executeCommand('terminal-error-sound-player.focus').then(() => {
-      console.log('Sound player initialization triggered.');
+    vscode.commands.executeCommand('wa-miiii-player.focus').then(() => {
+      console.log('wa-MIIII engine initialization triggered.');
     });
   }, 2000);
 
@@ -26,14 +26,14 @@ export function activate(context: vscode.ExtensionContext) {
     const exitCode = event.exitCode;
 
     if (exitCode !== undefined && exitCode !== 0) {
-      const config = vscode.workspace.getConfiguration('terminalErrorSound');
+      const config = vscode.workspace.getConfiguration('waMiiii');
       const enabled = config.get<boolean>('enabled', true);
 
       if (enabled) {
         console.log(`Command failed with exit code ${exitCode}. Playing sound...`);
         if (!soundProvider.isReady()) {
-          console.log('Sound player not ready, attempting to re-initialize...');
-          vscode.commands.executeCommand('terminal-error-sound-player.focus');
+          console.log('wa-MIIII engine not ready, attempting to re-initialize...');
+          vscode.commands.executeCommand('wa-miiii-player.focus');
           setTimeout(() => soundProvider.playSound(), 1000);
         } else {
           soundProvider.playSound();

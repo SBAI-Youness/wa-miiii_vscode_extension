@@ -1,6 +1,6 @@
 {
-  "name": "terminal-error-sound",
-  "displayName": "Terminal Error Sound",
+  "name": "wa-miiii",
+  "displayName": "wa-MIIII",
   "description": "Plays a sound when a terminal command fails.",
   "version": "0.1.0",
   "publisher": "SBAI-Youness",
@@ -21,24 +21,24 @@
   "contributes": {
     "commands": [
       {
-        "command": "terminalErrorSound.activatePlayer",
-        "title": "Activate Sound Engine"
+        "command": "waMiiii.activatePlayer",
+        "title": "Activate wa-MIIII Engine"
       }
     ],
     "views": {
       "explorer": [
         {
           "type": "webview",
-          "id": "terminal-error-sound-player",
-          "name": "Sound Engine",
+          "id": "wa-miiii-player",
+          "name": "wa-MIIII Engine",
           "icon": "$(unmute)"
         }
       ]
     },
     "configuration": {
-      "title": "Terminal Error Sound",
+      "title": "wa-MIIII",
       "properties": {
-        "terminalErrorSound.enabled": {
+        "waMiiii.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable or disable the error sound."
