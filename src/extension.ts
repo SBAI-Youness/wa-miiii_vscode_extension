@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (exitCode !== undefined && exitCode !== 0) {
       const config = vscode.workspace.getConfiguration('waMiiii');
-      const enabled = config.get<boolean>('enabled', true);
+      const enabled = config.get<boolean>('enabled', false);
 
       if (enabled) {
         console.log(`Command failed with exit code ${exitCode}. Playing sound...`);
@@ -72,6 +72,9 @@ class SoundPlayerProvider implements vscode.WebviewViewProvider {
         case 'error':
           console.error(`[Webview Error] ${message.text}`);
           break;
+        case 'toggleEnabled':
+          vscode.workspace.getConfiguration('waMiiii').update('enabled', message.enabled, vscode.ConfigurationTarget.Global);
+          break;
       }
     });
 
@@ -92,6 +95,8 @@ class SoundPlayerProvider implements vscode.WebviewViewProvider {
 
   private _getHtmlForWebview(webview: vscode.Webview) {
     const soundUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'assets', 'wa-miiii.wav'));
+    const config = vscode.workspace.getConfiguration('waMiiii');
+    const isEnabled = config.get<boolean>('enabled', false);
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -107,31 +112,46 @@ class SoundPlayerProvider implements vscode.WebviewViewProvider {
             font-size: 13px; margin-top: 10px;
         }
         button:hover { background: #0062a3; }
-        .status { color: #888; font-size: 11px; margin-top: 5px; }
+        #disable-btn { background: #d32f2f; }
+        #disable-btn:hover { background: #b71c1c; }
+        .status { color: #888; font-size: 11px; margin-top: 10px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
     <div>Sound Engine 🔊</div>
-    <button id="activate-btn">Click to Enable Audio</button>
-    <div id="status" class="status">Waiting for interaction...</div>
+    <button id="activate-btn" class="${isEnabled ? 'hidden' : ''}">Click to Enable Audio</button>
+    <button id="disable-btn" class="${!isEnabled ? 'hidden' : ''}">Click to Disable Audio</button>
+    <div id="status" class="status">${isEnabled ? 'Audio System Enabled ✅' : 'Audio System Disabled ❌'}</div>
     <audio id="error-audio" src="${soundUri}"></audio>
     <script>
         const vscode = acquireVsCodeApi();
         const audio = document.getElementById('error-audio');
-        const btn = document.getElementById('activate-btn');
+        const activateBtn = document.getElementById('activate-btn');
+        const disableBtn = document.getElementById('disable-btn');
         const status = document.getElementById('status');
 
-        btn.addEventListener('click', () => {
+        activateBtn.addEventListener('click', () => {
             // Unlocks audio on most browsers
             audio.play().then(() => {
                 audio.pause();
                 audio.currentTime = 0;
-                btn.style.display = 'none';
+                activateBtn.classList.add('hidden');
+                disableBtn.classList.remove('hidden');
                 status.innerText = 'Audio System Enabled ✅';
-                vscode.postMessage({ command: 'log', text: 'Audio unlocked by user interaction.' });
+                vscode.postMessage({ command: 'toggleEnabled', enabled: true });
+                vscode.postMessage({ command: 'log', text: 'Audio unlocked and enabled by user interaction.' });
             }).catch(e => {
                 vscode.postMessage({ command: 'error', text: 'Unlock failed: ' + e.message });
             });
+        });
+
+        disableBtn.addEventListener('click', () => {
+            activateBtn.classList.remove('hidden');
+            disableBtn.classList.add('hidden');
+            status.innerText = 'Audio System Disabled ❌';
+            vscode.postMessage({ command: 'toggleEnabled', enabled: false });
+            vscode.postMessage({ command: 'log', text: 'Audio system disabled.' });
         });
 
         window.addEventListener('message', event => {

@@ -2,8 +2,9 @@
   "name": "wa-miiii",
   "displayName": "wa-MIIII",
   "description": "Plays a sound when a terminal command fails.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "youness-sbai",
+  "icon": "assets/wa-miiii.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/SBAI-Youness/wa-miiii_vscode_extension.git"
@@ -40,7 +41,7 @@
       "properties": {
         "waMiiii.enabled": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Enable or disable the error sound."
         }
       }
