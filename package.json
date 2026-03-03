@@ -2,7 +2,7 @@
   "name": "wa-miiii",
   "displayName": "wa-MIIII",
   "description": "Plays a sound when a terminal command fails.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "youness-sbai",
   "icon": "assets/wa-miiii.png",
   "repository": {
